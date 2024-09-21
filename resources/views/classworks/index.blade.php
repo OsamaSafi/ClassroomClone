@@ -57,7 +57,7 @@
                 <h2 class="mb-3 text-success "> {{$group->first()->topic->name ?? "Unkown Topic"}} </h2>
                 <div class="accordion accordion-flush" id="accordionFlushExample">
                     @foreach ($group as $classwork)
-                    <div class="accordion-item">
+                    <section class="accordion-item">
                         <h2 class="accordion-header">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#flush-collapse{{$classwork->id}}" aria-expanded="false"
@@ -100,19 +100,20 @@
                                         class="btn btn-sm btn-outline-primary">{{__('Edit')}}</a>
                                     @endcan
                                     @can('classworks.delete', $classroom)
-                                    <form
+                                    {{-- <form
                                         action="{{ route('classrooms.classworks.destroy',[$classroom->id,$classwork->id]) }}"
-                                        method="POST">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit"
-                                            class="btn btn-sm btn-outline-danger">{{__('Delete')}}</button>
-                                    </form>
+                                    method="POST">
+                                    @csrf
+                                    @method('delete') --}}
+                                    <a href="#"
+                                        onclick="confirmDelete('{{ $classroom->id }}','{{ $classwork->id }}', this)"
+                                        class="btn btn-sm btn-outline-danger">{{__('Delete')}}</a>
+                                    {{-- </form> --}}
                                     @endcan
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
                     @endforeach
                 </div>
             </div>
@@ -122,7 +123,44 @@
 
     @push('scripts')
     <script>
-        classroomId = {{ $classwork->classroom_id }};
+        classroomId = {{ $classwork->classroom_id ?? ""}};
+
+
+        function confirmDelete(classroom_id,classwork_id,ref){
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    destroy(classroom_id,classwork_id,ref)
+                }
+            });
+        }
+        function destroy(classroom_id,classwork_id,ref){
+            axios.delete(`/classrooms/${classroom_id}/classworks/${classwork_id}`)
+                .then(function (response) {
+                    console.log(response.data);
+                    ref.closest('div').parentNode.parentNode.parentNode.remove();
+                    showMessage(response.data);
+            })
+            .catch(function (error) {
+                console.log(error.response);
+                showMessage(error.response.data);
+            })
+        }
+        function showMessage(data){
+            Swal.fire({
+            icon: data.icon,
+            title: data.message,
+            showConfirmButton: false,
+            timer: 3500
+            });
+        }
     </script>
     @endpush
 </x-main-layout>

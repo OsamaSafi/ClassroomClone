@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}">
     @stack('styles')
     <title>{{ $title }}</title>
 </head>
@@ -133,9 +134,11 @@
         </ul>
     </footer>
     <script src="{{ asset("js/bootstrap.min.js") }}"></script>
+    <script src="{{ asset('js/axios.min.js') }}"></script>
     <script src="{{ asset("js/bootstrap.bundle.min.js") }}"></script>
-    {{-- <script src="{{ asset('js/jquery.js') }}"></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('js/jquery.js') }}"></script>
+    <script src="{{ asset('js/fontawesome.min.js') }}"></script>
+    <script src="{{ asset('js/sweet_alert.js') }}"></script>
     <script>
         var classroomId;
         const userId = {{Auth::id()}}

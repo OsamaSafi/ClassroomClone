@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 class ClassworkController extends Controller
 {
@@ -192,8 +193,14 @@ class ClassworkController extends Controller
     {
         Gate::authorize('classworks.delete', $classroom);
 
-        $classwork->delete();
-        return redirect()->route('classrooms.classworks.index', $classroom->id)->with('success', 'classwork deleted!');
+        $isDeleted = $classwork->delete();
+        return response()->json(
+            [
+                'icon' => $isDeleted ? 'success' : 'error',
+                'message' => $isDeleted ? 'Deleted Successfully' : 'deleted fail'
+            ],
+            $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST
+        );
     }
 
     protected function getType()

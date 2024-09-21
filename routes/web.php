@@ -60,14 +60,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/payments/{subscription}/cancel', [PaymentsController::class, 'cancel'])->name('payments.cancel');
 
 
-    Route::get('/classrooms/trached', [ClassroomsController::class, 'trached'])
-        ->name('classrooms.trached');
+    Route::get('/classrooms/trashed', [ClassroomsController::class, 'trached'])
+        ->name('classrooms.trashed');
 
-    Route::put('/classrooms/trached/{classroom}', [ClassroomsController::class, 'restore'])
+    Route::put('/classrooms/trashed/{classroom}', [ClassroomsController::class, 'restore'])
         ->name('classrooms.restore');
 
-    Route::delete('/classrooms/trached/{classroom}', [ClassroomsController::class, 'forceDelete'])
-        ->name('classrooms.force-delete');
+    Route::delete('classrooms/trashed/{classroom}', [ClassroomsController::class, 'forceDelete'])
+    ->name('classrooms.force-delete');
+
+
 
 
     Route::get('/classrooms/{classroom}/join', [JoinClassroomController::class, 'create'])->name('classrooms.join');

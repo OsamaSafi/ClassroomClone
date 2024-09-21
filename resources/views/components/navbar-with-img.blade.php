@@ -6,13 +6,25 @@
                 <h1> {{$title}} </h1>
                 <h4 class="pb-3">{{ $classroomName }}</h3>
             </div>
-            <p><a href="{{ route('classrooms.classworks.index',$classroomId) }}" class="me-2 btn btn-dark" style="">
+            <p>
+                <a href="{{ route('classrooms.show',$classroomId) }}" class="me-2 btn btn-dark" style="">
+                <i class="fa-solid fa-list-check"></i>
+                    {{__("Activity")}}
+                </a>
+                <a href="{{ route('classrooms.classworks.index',$classroomId) }}" class="me-2 btn btn-dark" style="">
+                <i class="fa-solid fa-briefcase"></i>
                     {{__("Classworks")}}
                 </a>
                 <a href="{{ route('classrooms.topics.create',$classroomId) }}"
-                    class="me-2 btn btn-dark">{{__('Topics')}}</a>
-                <a href="{{ route('classrooms.people',$classroomId) }}" class="btn btn-dark me-2">{{__('People')}}</a>
-                <a href="{{ route('classrooms.chat',$classroomId) }}" class="btn btn-dark">{{__('Chating')}}</a>
+                    class="me-2 btn btn-dark">
+                    <i class="fa-solid fa-table-cells"></i>
+                    {{__('Topics')}}</a>
+                <a href="{{ route('classrooms.people',$classroomId) }}" class="btn btn-dark me-2">
+                    <i class="fa-solid fa-users"></i>
+                    {{__('People')}}</a>
+                <a href="{{ route('classrooms.chat',$classroomId) }}" class="btn btn-dark">
+                    <i class="fa-solid fa-message"></i>
+                    {{__('Chatting')}}</a>
             </p>
         </div>
 

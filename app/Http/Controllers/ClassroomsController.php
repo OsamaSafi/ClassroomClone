@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class ClassroomsController extends Controller
 {
@@ -129,10 +130,13 @@ class ClassroomsController extends Controller
     public function destroy(string $id)
     {
         $classroom = Classroom::findOrFail($id);
-        $classroom->delete();
+        $isDeleted = $classroom->delete();
         // Classroom::deleteCoverImage($classroom->cover_image_path);
 
-        return redirect()->route('classrooms.index')->with('danger', "classroom ($classroom->name) Trached");
+        return response()->json([
+            'icon' => $isDeleted ? 'success' : 'error',
+            'message' => $isDeleted ? 'deleted successfully' : 'delete failed',
+        ], $isDeleted ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 
 

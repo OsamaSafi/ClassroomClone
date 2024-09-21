@@ -19,14 +19,14 @@
         <h5 class="card-title mt-3">{{ $classroom->name }}</h5>
         <p class="card-text">{{ $classroom->section }} - {{ $classroom->room }}</p>
         <div class="d-flex justify-content-start gap-2">
-            <a href="{{ route('classrooms.show',$classroom->id) }}" class="btn btn-outline-primary">{{__('View')}}</a>
+            <a href="{{ route('classrooms.show',$classroom->id) }}" class="btn btn-outline-primary"><i class="fa-solid fa-square-up-right"></i></a>
             @can('classroom.manage', $classroom)
-            <a href="{{ route('classrooms.edit', $classroom->id) }}" class="btn btn-outline-success">{{__('Edit')}}</a>
+            <a href="{{ route('classrooms.edit', $classroom->id) }}" class="btn btn-outline-success"><i class="fa-solid fa-pen-to-square"></i></a>
             @endcan
             <form action="{{ route('classrooms.destroy',$classroom->id) }}" method="POST">
                 @csrf
                 @method('delete')
-                <button type="submit" class="btn btn-outline-danger">{{__('Delete')}}</button>
+                <button type="submit" class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
             </form>
         </div>
     </div>
