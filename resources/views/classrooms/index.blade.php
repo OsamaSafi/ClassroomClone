@@ -30,7 +30,7 @@
                 <div class="row">
                     @if ($classrooms->count())
                     @foreach ($classrooms as $classroom)
-                    <section class=" col-md-3">
+                    <section  style="cursor: pointer" class=" col-md-3">
                         <div class="card mb-4">
                             <img src="{{ Storage::disk('public')->url($classroom->cover_image_path) }}"
                                 class="card-img-top" alt="">
@@ -54,22 +54,45 @@
                                 </a>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title mt-3">{{ $classroom->name }}</h5>
-                                <p class="card-text">{{ $classroom->section }} - {{ $classroom->room }}</p>
-                                <div class="d-flex justify-content-start gap-2">
-                                    <a href="{{ route('classrooms.show',$classroom->id) }}"
-                                        class="btn btn-outline-primary"><i class="fa-solid fa-square-up-right"></i></a>
-                                    @can('classroom.manage', $classroom)
-                                    <a href="{{ route('classrooms.edit', $classroom->id) }}"
-                                        class="btn btn-outline-success"><i class="fa-solid fa-pen-to-square"></i></a>
-                                    @endcan
-                                    {{-- <form action="{{ route('classrooms.destroy',$classroom->id) }}" method="POST">
-                                    @csrf
-                                    @method('delete') --}}
-                                    <a href="#" onclick="confirmDelete('{{$classroom->id}}',this)"
-                                        class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></a>
-                                    {{-- </form> --}}
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h5 class="card-title mt-3">{{ $classroom->name }}</h5>
+                                        <p class="card-text">{{ $classroom->section }} - {{ $classroom->room }}</p>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="btn dropdown" type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu text-center">
+                                            <li><a href="{{ route('classrooms.show',$classroom->id) }}"
+                                                    class="dropdown-item"> {{__('View')}} </a></li>
+                                            <li>@can('classroom.manage', $classroom)
+                                                <a href="{{ route('classrooms.edit', $classroom->id) }}"
+                                                    class="dropdown-item">{{__('Edit')}}
+                                                </a>
+                                                @endcan
+                                            </li>
+                                            <li><a href="#" onclick="confirmDelete('{{$classroom->id}}',this)"
+                                                    class="dropdown-item">{{__('Delete')}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
+                                {{-- <div class="d-flex justify-content-start gap-2">
+                                    <a href="{{ route('classrooms.show',$classroom->id) }}"
+                                class="btn btn-outline-primary"><i class="fa-solid fa-square-up-right"></i></a>
+                                @can('classroom.manage', $classroom)
+                                <a href="{{ route('classrooms.edit', $classroom->id) }}"
+                                    class="btn btn-outline-success"><i class="fa-solid fa-pen-to-square"></i></a>
+                                @endcan --}}
+                                {{-- <form action="{{ route('classrooms.destroy',$classroom->id) }}" method="POST">
+                                @csrf
+                                @method('delete') --}}
+                                {{-- <a href="#" onclick="confirmDelete('{{$classroom->id}}',this)"
+                                class="btn btn-outline-danger"><i class="fa-solid fa-trash"></i></a>
+                                </form> --}}
+                                {{-- </div> --}}
                             </div>
                         </div>
                     </section>
@@ -83,7 +106,7 @@
                         <a href="{{ route('classrooms.create') }}" class="btn btn-outline-success me-2">
                             <i class="fa-solid fa-square-plus"></i>
                             {{__('Add')}}</a>
-                        <a href="{{ route('classrooms.trached') }}" class="btn btn-outline-dark">
+                        <a href="{{ route('classrooms.trashed') }}" class="btn btn-outline-dark">
                             <i class="fa fa-trash" aria-hidden="true"></i>
                             {{__('Trached')}}</a>
                     </div>
@@ -135,10 +158,6 @@
                 timer: 1500
             });
         }
-    </script>
-    <script>
-
-
 
     </script>
 

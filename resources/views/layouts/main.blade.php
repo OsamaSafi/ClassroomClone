@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/toastify.min.css') }}">
     @stack('styles')
     <title>{{ $title }}</title>
 </head>
@@ -139,6 +140,7 @@
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/fontawesome.min.js') }}"></script>
     <script src="{{ asset('js/sweet_alert.js') }}"></script>
+    <script src="{{ asset('js/toastify-js.js') }}"></script>
     <script>
         var classroomId;
         const userId = {{Auth::id()}}

@@ -15,7 +15,7 @@
                 <i class="fa-solid fa-briefcase"></i>
                     {{__("Classworks")}}
                 </a>
-                <a href="{{ route('classrooms.topics.create',$classroomId) }}"
+                <a href="{{ route('classrooms.topics.index',$classroomId) }}"
                     class="me-2 btn btn-dark">
                     <i class="fa-solid fa-table-cells"></i>
                     {{__('Topics')}}</a>

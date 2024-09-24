@@ -4,60 +4,53 @@
             :classroom-cover-img="$classroom->cover_image_path" />
         <x-alert name='success' />
         @can('topic.manage', $classroom)
-        <form action="{{ route('classrooms.topics.store',$classroom->id) }}" method="post">
+        <form id="form-create">
             @csrf
-            <x-form.floating-control name="name" label="{{__('Topic name')}}">
-                <x-form.input type="text" name="name" id="name" placeholder="name" />
-            </x-form.floating-control>
+            <input type="hidden" class="form-control" id="classroom_id" value="{{ $classroom->id }}" placeholder="">
+            <input type="hidden" class="form-control" id="user_id" value="{{ Auth::id() }}" placeholder="">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="name" placeholder="Enter Topic Name">
+                <label for="name">Topic Name</label>
+            </div>
             <x-form.error name='name' />
-            <button type="submit" class="btn btn-primary mb-3">{{__('Create Topic')}}</button>
+            <button type="button" onclick="store('{{$classroom->id}}')"
+                class="btn btn-primary mb-3">{{__('Create Topic')}}</button>
         </form>
         @endcan
-        <div class="card">
-            <!-- /.card-header -->
-            <div class="card-body">
-                <table id="example1" class="text-center table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>{{__('ID')}}</th>
-                            <th>{{__('Name')}}</th>
-                            <th>{{__('Classroom')}}</th>
-                            <th>{{__('User_id')}}</th>
-                            <th colspan="2">{{__('Action')}}</th>
-                        </tr>
-                    </thead>
-                    @if ($topics->count())
-                    <tbody>
-                        @foreach ($topics as $topic)
-                        <tr>
-                            <td>{{ $topic->id }}</td>
-                            <td>{{ $topic->name }}</td>
-                            <td>{{ $classroom->name }}</td>
-                            <td>{{ $topic->user_id}}</td>
-                            @can('topic.manage', $classroom)
-                            <td>
-                                <a href="{{ route('classrooms.topics.edit',[$classroom->id,$topic->id]) }}"
-                                    class="btn btn-outline-success">{{__('Edit')}}</a>
-                            </td>
-                            @endcan
-                            <td>
-                                <form action="{{ route('classrooms.topics.destroy',[$classroom->id,$topic->id]) }}"
-                                    method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit" class="btn btn-outline-danger">
-                                        {{__('Delete')}}
-                                    </button>
-                                </form>
-                            </td>
-                            @endforeach
-                    </tbody>
-                    @else
-                    <td colspan="10" class="text-left">{{__('Topic not found')}}</td>
-                    @endif
-                </table>
-            </div>
-            <!-- /.card-body -->
-        </div>
+
     </div>
+
+    @push('scripts')
+    <script>
+        function store(classroom){
+            axios.post(`/classrooms/${classroom}/topics`,{
+                name : document.getElementById('name').value,
+                classroom_id:document.getElementById('classroom_id').value,
+                user_id:document.getElementById('user_id').value,
+            })
+            .then(function (response) {
+            console.log(response.data);
+            document.getElementById('form-create').reset();
+            showToastify(response.data)
+            })
+            .catch(function (error) {
+            console.log(error.response);
+            showToastify(error.response.data)
+            })
+        }
+
+        function showToastify(data){
+            Toastify({
+                text: data.message,
+                className: 'info',
+                style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                }
+                }).showToast();
+        }
+
+
+
+    </script>
+    @endpush
 </x-main-layout>

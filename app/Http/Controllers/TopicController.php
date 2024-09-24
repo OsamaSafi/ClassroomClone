@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Classroom;
 use App\Models\Topic;
+use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class TopicController extends Controller
 {
@@ -15,6 +17,9 @@ class TopicController extends Controller
      */
     public function index(Classroom $classroom)
     {
+        App::setLocale(Auth::user()->profile->locale);
+        $topics = $classroom->topics()->get();
+        return view('topics.index', compact('classroom', 'topics'));
     }
 
     /**
@@ -32,16 +37,35 @@ class TopicController extends Controller
      */
     public function store(Request $request, Classroom $classroom)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'classroom_id' => ['nullable']
+        // $request->validate([
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'classroom_id' => ['nullable']
+        // ]);
+        // $request->merge([
+        //     'user_id' => Auth::id(),
+        //     'classroom_id' => $classroom->id
+        // ]);
+        // Topic::create($request->all());
+        // return redirect()->route('classrooms.topics.create', $classroom->id)->with('success', 'Topics Created!');
+        $validator = Validator($request->all(), [
+            'name' => 'required|string|min:3|max:45',
+            'classroom_id' => 'required',
+            'user_id' => 'required',
         ]);
-        $request->merge([
-            'user_id' => Auth::id(),
-            'classroom_id' => $classroom->id
-        ]);
-        Topic::create($request->all());
-        return redirect()->route('classrooms.topics.create', $classroom->id)->with('success', 'Topics Created!');
+        if (! $validator->fails()) {
+            $topic = new Topic();
+            $topic->name = $request->input('name');
+            $topic->classroom_id = $request->input('classroom_id');
+            $topic->user_id = $request->input('user_id');
+            $isSaved = $topic->save();
+            return response()->json([
+                'message' => $isSaved ? 'topic created successfully' : 'creat failed'
+            ], $isSaved ? Response::HTTP_CREATED : Response::HTTP_BAD_REQUEST);
+        } else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first()
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -81,10 +105,12 @@ class TopicController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Classroom $classroom, string $id)
+    public function destroy(Classroom $classroom, Topic $topic)
     {
-        $topic = $classroom->topics()->findOrFail($id);
-        $topic->delete();
-        return redirect()->route('classrooms.topics.create', $classroom->id)->with('success', 'Topic deleted');
+        $isDelete = $topic->delete();
+        return response()->json([
+            'message' => $isDelete ? 'Topic delete successfully' : 'delete failed',
+            'icon' => $isDelete ? 'success' : 'error',
+        ], $isDelete ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
     }
 }
