@@ -18,6 +18,7 @@ class EnsureUserHasSubscription
         $user = $request->user();
         $exists = $user->subscriptions()->where('expires_at', '>=', now())->exists();
         if (!$exists) {
+            return redirect()->route('plans');
             abort(403, 'You dont have active subscription');
         }
         return $next($request);

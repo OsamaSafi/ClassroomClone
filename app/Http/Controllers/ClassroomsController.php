@@ -27,7 +27,6 @@ class ClassroomsController extends Controller
     public function index(Request $request, Classroom $classroom)
     {
         // dd($classroom->users()->first()->profile->user_image_path ?? "");
-        App::setLocale(Auth::user()->profile->locale);
         $classrooms = $classroom->orderBy('created_at', 'desc')->filter($request->query())->status('active')->paginate(4);
         return view('classrooms.index', compact('classrooms'));
     }
@@ -37,7 +36,6 @@ class ClassroomsController extends Controller
      */
     public function create()
     {
-        App::setLocale(Auth::user()->profile->locale);
 
         return view('classrooms.create', [
             'classroom' => new Classroom()
@@ -72,9 +70,7 @@ class ClassroomsController extends Controller
             return back()->withInput()->with('danger', $e->getMessage());
         }
 
-        return response()->json([
-            'message' => 'add classroom successfuly'
-        ]);
+        return redirect()->route('classrooms.index')->with('success', 'classroom created');
         // return redirect()->route('classrooms.index')->with('success', 'classroom is created');
     }
 
@@ -83,7 +79,6 @@ class ClassroomsController extends Controller
      */
     public function show(string $id)
     {
-        App::setLocale(Auth::user()->profile->locale);
         $classroom = Classroom::findOrFail($id);
         return view('classrooms.show', compact('classroom'));
     }
@@ -93,7 +88,6 @@ class ClassroomsController extends Controller
      */
     public function edit(string $id)
     {
-        App::setLocale(Auth::user()->profile->locale);
         $classroom = Classroom::findOrFail($id);
         Gate::authorize('classroom.manage', $classroom);
         return view('classrooms.edit', compact('classroom'));
@@ -142,7 +136,6 @@ class ClassroomsController extends Controller
 
     public function trached()
     {
-        App::setLocale(Auth::user()->profile->locale);
 
         $classrooms = Classroom::onlyTrashed()->get();
 

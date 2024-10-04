@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ClassroomPeopleController;
 use App\Http\Controllers\ClassroomsController;
 use App\Http\Controllers\ClassworkController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\dashboard\DashboardClassroomController;
 use App\Http\Controllers\JoinClassroomController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\NotificationController;
@@ -53,7 +55,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/subscription', [SubscriptionsController::class, 'store'])->name('subscriptions.store');
 
-
     Route::get('/subscriptions/{subscription}/pay', [PaymentsController::class, 'create'])->name('chackout');
     Route::post('/payments/{subscription}', [PaymentsController::class, 'store'])->name('payments.store');
     Route::get('/payments/{subscription}/success', [PaymentsController::class, 'success'])->name('payments.success');
@@ -67,15 +68,16 @@ Route::middleware('auth')->group(function () {
         ->name('classrooms.restore');
 
     Route::delete('classrooms/trashed/{classroom}', [ClassroomsController::class, 'forceDelete'])
-    ->name('classrooms.force-delete');
+        ->name('classrooms.force-delete');
 
 
 
 
     Route::get('/classrooms/{classroom}/join', [JoinClassroomController::class, 'create'])->name('classrooms.join');
     Route::post('/classrooms/{classroom}/join', [JoinClassroomController::class, 'store']);
+    Route::get('/classrooms/join', [JoinClassroomController::class, 'joinByCode'])->name('classrooms.join-by-code');
 
-    Route::get('classrooms/{classroom}/chat',[ClassroomsController::class,'chat'])->name('classrooms.chat');
+    Route::get('classrooms/{classroom}/chat', [ClassroomsController::class, 'chat'])->name('classrooms.chat');
 
     Route::resource('/classrooms', ClassroomsController::class);
     Route::resource('/classrooms.classworks', ClassworkController::class);
@@ -94,14 +96,19 @@ Route::middleware('auth')->group(function () {
     Route::post('/classworks/{classwork}/submissions', [SubmissionController::class, 'store'])->name('submissions.store');
     Route::put('/classworks/{classwork}/submissions', [SubmissionController::class, 'update'])->name('submissions.update');
     Route::get('submissions/{submission}/file', [SubmissionController::class, 'file'])->name('submissions.file');
+    Route::put('submissions/{submission}/grade', [SubmissionController::class, 'updateGrade'])->name('grade-submission');
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
 });
 
 
 
-
-
+Route::prefix('dashboard/admin')->as('dashboard.')->middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('layouts.parent');
+    });
+    Route::resource('classrooms', DashboardClassroomController::class);
+});
 
 // Route::get('/login', [LoginController::class, 'create'])->name('login')->middleware('guest');
 // Route::post('/login', [LoginController::class, 'store'])->name('login.store')->middleware('guest');

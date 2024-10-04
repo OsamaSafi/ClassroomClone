@@ -20,6 +20,7 @@
 
     </div>
 
+
     @push('scripts')
     <script>
         function store(classroom){
@@ -31,25 +32,13 @@
             .then(function (response) {
             console.log(response.data);
             document.getElementById('form-create').reset();
-            showToastify(response.data)
+            toastr.success(response.data.message)
             })
             .catch(function (error) {
             console.log(error.response);
-            showToastify(error.response.data)
+            toastr.error(error.response.data.message)
             })
         }
-
-        function showToastify(data){
-            Toastify({
-                text: data.message,
-                className: 'info',
-                style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)",
-                }
-                }).showToast();
-        }
-
-
 
     </script>
     @endpush

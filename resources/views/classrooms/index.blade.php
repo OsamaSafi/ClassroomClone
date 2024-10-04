@@ -48,7 +48,7 @@
                                         </div>
                                         <div class="text-dark">
                                             <i class="fa-solid fa-user"></i> .
-                                            <span> {{ $classroom->teachers()->first()->profile->full_name }}</span>
+                                            <span> {{ $classroom->teachers()->first()->name }}</span>
                                         </div>
                                     </div>
                                 </a>

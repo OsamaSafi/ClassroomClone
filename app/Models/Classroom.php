@@ -63,7 +63,7 @@ class Classroom extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'classroom_user', 'classroom_id', 'user_id', 'id', 'id')->withPivot(['role']);
+        return $this->belongsToMany(User::class, 'classroom_user', 'classroom_id', 'user_id', 'id', 'id')->withPivot(['role', 'user_id']);
     }
 
     public function user()

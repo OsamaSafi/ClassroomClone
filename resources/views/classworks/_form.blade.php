@@ -5,11 +5,15 @@
         </x-form.floating-control>
         <x-form.error name="title" />
 
-        <x-form.floating-control name="description" label="">
+        {{-- <x-form.floating-control name="description" label="">
             <x-form.textarea name="description" value="{{$classwork->description}}" id="description"
-                placeholder="{{__('description')}}" />
+        placeholder="{{__('description')}}" />
         </x-form.floating-control>
-        <x-form.error name="description" />
+        <x-form.error name="description" /> --}}
+
+        <textarea id="summernote" style="height: 495px" name="description" style="display: none;">
+            {!!$classwork->description!!}
+        </textarea>
     </div>
     <div class="col-md-4">
         <!-- Button trigger modal -->
@@ -23,7 +27,8 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('Students')}} ({{$classroom->students()->count()}})</h1>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{__('Students')}}
+                            ({{$classroom->students()->count()}})</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -69,42 +74,24 @@
 
 <button type="submit" class="btn btn-dark mt-3">{{__($btn_type)}}</button>
 
-@push('scripts')
-<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.css" />
-<script type="importmap">
-    {
-        "imports": {
-            "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.0/ckeditor5.js",
-            "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.0/"
-        }
-    }
-</script>
-<script type="module">
-    import {
-        ClassicEditor,
-        Essentials,
-        Bold,
-        Italic,
-        Font,
-        Paragraph,
-        Mention,
-        SelectAll,
-        Autosave,
-        AccessibilityHelp,
-        Undo
-    } from 'ckeditor5';
+@push('styles')
+<link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
+@endpush
 
-    ClassicEditor
-        .create( document.querySelector( '#description' ), {
-            plugins: [ Essentials, Bold, Italic, Font, Paragraph ,AccessibilityHelp,Autosave,Mention,SelectAll,Undo],
-            toolbar: {
-                items: [
-                    'undo', 'redo', '|', 'bold', 'italic', '|',
-                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|', 'selectAll', '|','accessibilityHelp',
-                ]
-            }
-        } )
-        .then( /* ... */ )
-        .catch( /* ... */ );
+@push('scripts')
+<script src="{{ asset('plugins/summernote/summernote-bs4.min.js') }}"></script>
+
+<script>
+    $(function () {
+        // Summernote
+        $('#summernote').summernote()
+
+        // CodeMirror
+        CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
+        mode: "htmlmixed",
+        theme: "monokai"
+        });
+    })
 </script>
+
 @endpush

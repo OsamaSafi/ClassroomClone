@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -126,8 +127,9 @@ class ClassworkController extends Controller
 
         Gate::authorize('classworks.view', $classwork);
         $comment = new Comment();
+        
         $userAssignment = $classwork->users()->where('id', '=', $classwork->user_id)->get();
-        $submissions = $classwork->submissions()->where('classwork_id', '=', $classwork->id)->get();
+        $submissions = Auth::user()->submissions()->where('classwork_id', '=', $classwork->id)->get();
         return view('classworks.show', compact('classroom', 'submissions', 'classwork', 'comment', 'userAssignment'));
     }
 

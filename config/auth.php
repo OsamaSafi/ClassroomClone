@@ -40,6 +40,7 @@ return [
             'driver' => 'session', // auth اين رح يتم تخزين معلومات ال
             'provider' => 'users', //مصدر المستخدمين من وين
         ],
+
     ],
 
     /*
@@ -64,6 +65,7 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+
 
         // 'users' => [
         //     'driver' => 'database',

@@ -9,10 +9,14 @@ class Submission extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'user_id', 'classwork_id', 'content'
+        'user_id', 'classwork_id', 'content','grade'
     ];
 
     public function classwork()
+    {
+        return $this->belongsTo(Classwork::class);
+    }
+    public function user()
     {
         return $this->belongsTo(Classwork::class);
     }

@@ -57,4 +57,22 @@ class JoinClassroomController extends Controller
         //     ->where('user_id', $user_id)
         //     ->exists()
     }
+
+    public function joinByCode(Request $request)
+    {
+        $request->validate([
+            'code' => 'required|min:3|string'
+        ]);
+
+        $classroom = Classroom::withoutGlobalScope(UserClassroomScope::class)
+            ->status('active')->where('code', '=', $request->input('code'))->first();
+        if ($classroom) {
+            try {
+                $this->exists($classroom, Auth::id());
+            } catch (Exception $e) {
+                return redirect()->route('classrooms.show', $classroom->id)->with('danger', $e->getMessage());
+            }
+            return view('classrooms.join', compact('classroom'));
+        }
+    }
 }

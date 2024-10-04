@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('classwork_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('content');
+            $table->float('grade')->nullable();
             $table->enum('type', ['file', 'link']);
             $table->timestamps();
         });

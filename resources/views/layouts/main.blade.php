@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/toastify.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
     @stack('styles')
     <title>{{ $title }}</title>
 </head>
@@ -58,6 +58,45 @@
             </div> --}}
             {{-- <a href="#" style="text-decoration: none; color: #000"
                                 class="d-block">{{ Auth::user()->name }}</a> --}}
+
+
+            <div class="me-3">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Join
+                    <i class="fa-solid fa-arrow-right fa-bounce"></i>
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Enter The code to Join Classroom
+                                </h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('classrooms.join-by-code') }}" method="get">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" name="code" class="form-control" id="code"
+                                            placeholder="Enter code">
+                                        <label for="code">Code</label>
+
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-outline-success">join</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
             <div class="dropdown">
                 <div class="image">
                     <a class="" style="text-decoration: none;color:#000" href="#" role="button"
@@ -70,7 +109,7 @@
                         {{Auth::user()->name}}
                         @endif
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu text-center">
                         <li>
                             <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                 @if (Auth::user()->profile->user_img_path)
@@ -82,9 +121,11 @@
                         </li>
                         <li>
                         <li>
-                            <form action="{{ route('logout') }}" method="post">
+                            <form action="{{route('logout')}}" method="post">
                                 @csrf
-                                <button type="submit" class="dropdown-item text-center">logout</button>
+
+                                <button type="submit" class="dropdown-item text-center">
+                                    logout</button>
                             </form>
                         </li>
                         {{-- <li><a class="dropdown-item" href="#"></a></li> --}}
@@ -140,7 +181,7 @@
     <script src="{{ asset('js/jquery.js') }}"></script>
     <script src="{{ asset('js/fontawesome.min.js') }}"></script>
     <script src="{{ asset('js/sweet_alert.js') }}"></script>
-    <script src="{{ asset('js/toastify-js.js') }}"></script>
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
     <script>
         var classroomId;
         const userId = {{Auth::id()}}

@@ -49,8 +49,8 @@ class TopicController extends Controller
         // return redirect()->route('classrooms.topics.create', $classroom->id)->with('success', 'Topics Created!');
         $validator = Validator($request->all(), [
             'name' => 'required|string|min:3|max:45',
-            'classroom_id' => 'required',
-            'user_id' => 'required',
+            'classroom_id' => 'required|integer',
+            'user_id' => 'required|integer',
         ]);
         if (! $validator->fails()) {
             $topic = new Topic();
@@ -93,13 +93,29 @@ class TopicController extends Controller
      */
     public function update(Request $request, Classroom $classroom, string $id)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'classroom_id' => ['nullable']
+        // $request->validate([
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'classroom_id' => ['nullable']
+        // ]);
+        // $topic = $classroom->topics()->findOrFail($id);
+        // $topic->update($request->all());
+        // return redirect()->route('classrooms.topics.create', $classroom->id)->with('success', 'Topics Updated!');
+        $validator = Validator($request->all(), [
+            'name' => 'required|string|min:2|max:100',
+            'classroom_id' => 'required|integer',
+            'user_id' => 'required|integer',
         ]);
-        $topic = $classroom->topics()->findOrFail($id);
-        $topic->update($request->all());
-        return redirect()->route('classrooms.topics.create', $classroom->id)->with('success', 'Topics Updated!');
+        if (! $validator->fails()) {
+            $topic = $classroom->topics()->findOrFail($id);
+            $isUpdated = $topic->update($request->all());
+            return response()->json([
+                'message' => $isUpdated ? "Topic Updated Successfully" : "Topic Update Falid"
+            ], $isUpdated ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST);
+        } else {
+            return response()->json([
+                'message' => $validator->getMessageBag()->first()
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
