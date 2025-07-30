@@ -27,13 +27,39 @@
                                     <p>{{ __($teacher->name) }}</p>
                                     <span>{{ __($teacher->email) }}</span>
                                     @if ($teacher->id !== $classroom->user_id)
-                                    <form action="{{ route('classrooms.people.destroy',$classroom->id) }}"
-                                        method="post">
-                                        @csrf
-                                        @method('delete')
-                                        <input type="hidden" name="user_id" value="{{ $teacher->id }}">
-                                        <button type="submit" class="btn btn-sm btn-danger">{{ __('Leave') }}</button>
-                                    </form>
+                                    <div class="dropdown">
+                                        <button class="btn dropdown" type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu text-center">
+                                            <li>
+                                                <form action="{{ route('classrooms.people.destroy',$classroom->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <input type="hidden" name="user_id" value="{{ $teacher->id }}">
+                                                    {{-- <p>{{dd($teacher->id == $classroom->user_id)}}</p> --}}
+                                                    <button type="submit"
+                                                        class="dropdown-item">{{ __('Delete') }}</button>
+                                                </form>
+                                            </li>
+                                            @can('people.manage', $classroom)
+                                            <li>
+                                                <form
+                                                    action="{{ route('classrooms.people.makeStudent',$classroom->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('put')
+                                                    <input type="hidden" name="user_id" value="{{ $teacher->id }}">
+                                                    <button type="submit"
+                                                        class="dropdown-item">{{ __('Set Student') }}</button>
+                                                </form>
+                                            </li>
+                                            @endcan
+                                        </ul>
+                                    </div>
+
                                     @endif
                                 </div>
                             </div>
@@ -62,14 +88,44 @@
                                 <div class="d-flex justify-content-between">
                                     <p>{{ __($student->name) }}</p>
                                     <span>{{ __($student->email) }}</span>
-                                    @can('people.delete', $classroom)
-                                    <form action="{{ route('classrooms.people.destroy',$classroom->id) }}"
-                                        method="post">
-                                        @csrf
-                                        @method('delete')
-                                        <input type="hidden" name="user_id" value="{{ $student->id }}">
-                                        <button type="submit" class="btn btn-sm btn-danger">{{__('Delete')}}</button>
-                                    </form>
+
+                                    <div class="dropdown">
+                                        <button class="btn dropdown" type="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu text-center">
+                                            <li>
+                                                <form action="{{ route('classrooms.people.destroy',$classroom->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <input type="hidden" name="user_id" value="{{ $student->id }}">
+                                                    <button type="submit"
+                                                        class="dropdown-item">{{__('Delete')}}</button>
+                                                </form>
+                                            </li>
+                                            @can('people.manage', $classroom)
+                                            <li>
+                                                <form
+                                                    action="{{ route('classrooms.people.makeTeacher',$classroom->id) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('put')
+                                                    <input type="hidden" name="user_id" value="{{ $student->id }}">
+                                                    <button type="submit"
+                                                        class="dropdown-item">{{__('Set Teacher')}}</button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    {{-- <form action="{{ route('classrooms.people.destroy',$classroom->id) }}"
+                                    method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <input type="hidden" name="user_id" value="{{ $student->id }}">
+                                    <button type="submit" class="btn btn-sm btn-danger">{{__('Delete')}}</button>
+                                    </form> --}}
                                     @endcan
                                 </div>
                             </div>

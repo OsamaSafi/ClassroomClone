@@ -26,8 +26,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::before(function () {
-        });
+        Gate::before(function () {});
 
         Gate::define('classworks.view', function (User $user, Classwork $classwork) {
             $teacher = $user->classrooms()
@@ -108,6 +107,11 @@ class AuthServiceProvider extends ServiceProvider
             $owner = $user->id == $classroom->user_id;
 
             return $teacher || $owner;
+        });
+        
+        Gate::define('people.manage', function (User $user, Classroom $classroom) {
+            $owner = $user->id == $classroom->user_id;
+            return $owner;
         });
     }
 }

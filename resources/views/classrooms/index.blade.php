@@ -30,7 +30,7 @@
                 <div class="row">
                     @if ($classrooms->count())
                     @foreach ($classrooms as $classroom)
-                    <section  style="cursor: pointer" class=" col-md-3">
+                    <section style="cursor: pointer" class=" col-md-3">
                         <div class="card mb-4">
                             <img src="{{ Storage::disk('public')->url($classroom->cover_image_path) }}"
                                 class="card-img-top" alt="">

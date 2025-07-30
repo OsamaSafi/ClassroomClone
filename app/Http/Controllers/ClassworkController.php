@@ -109,7 +109,8 @@ class ClassworkController extends Controller
                 ];
                 $classwork = $classroom->classworks()->create($data);
                 $classwork->users()->attach($request->input('students'));
-                event(new ClassworkCreated($classwork));
+                // event(new ClassworkCreated($classwork));
+                broadcast(new ClassworkCreated($classwork));
             });
         } catch (QueryException $e) {
             return back()->with('danger', $e->getMessage());
@@ -127,7 +128,7 @@ class ClassworkController extends Controller
 
         Gate::authorize('classworks.view', $classwork);
         $comment = new Comment();
-        
+
         $userAssignment = $classwork->users()->where('id', '=', $classwork->user_id)->get();
         $submissions = Auth::user()->submissions()->where('classwork_id', '=', $classwork->id)->get();
         return view('classworks.show', compact('classroom', 'submissions', 'classwork', 'comment', 'userAssignment'));

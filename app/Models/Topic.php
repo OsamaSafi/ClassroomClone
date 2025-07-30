@@ -11,7 +11,9 @@ class Topic extends Model
 
 
     protected $fillable = [
-        'name', 'classroom_id', 'user_id'
+        'name',
+        'classroom_id',
+        'user_id'
     ];
 
 
@@ -22,5 +24,10 @@ class Topic extends Model
     public function classroom()
     {
         return $this->belongsTo(Classroom::class, 'classroom_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

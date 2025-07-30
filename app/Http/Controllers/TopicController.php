@@ -8,6 +8,7 @@ use Dotenv\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 
 class TopicController extends Controller
@@ -27,6 +28,7 @@ class TopicController extends Controller
      */
     public function create(Classroom $classroom)
     {
+        Gate::authorize('topic.manage', $classroom);
         App::setLocale(Auth::user()->profile->locale);
         $topics = $classroom->topics()->get();
         return view('topics.create', compact('classroom', 'topics'));
@@ -37,6 +39,8 @@ class TopicController extends Controller
      */
     public function store(Request $request, Classroom $classroom)
     {
+        Gate::authorize('topic.manage', $classroom);
+
         // $request->validate([
         //     'name' => ['required', 'string', 'max:255'],
         //     'classroom_id' => ['nullable']
@@ -73,6 +77,7 @@ class TopicController extends Controller
      */
     public function show(Classroom $classroom, string $id)
     {
+
         App::setLocale(Auth::user()->profile->locale);
         $topic = $classroom->topics()->findOrFail($id);
         return view('topics.show', compact('topic'));
@@ -83,6 +88,8 @@ class TopicController extends Controller
      */
     public function edit(Classroom $classroom, string $id)
     {
+        Gate::authorize('topic.manage', $classroom);
+
         App::setLocale(Auth::user()->profile->locale);
         $topic = $classroom->topics()->findOrFail($id);
         return view('topics.edit', compact('topic', 'classroom'));
@@ -93,6 +100,8 @@ class TopicController extends Controller
      */
     public function update(Request $request, Classroom $classroom, string $id)
     {
+        Gate::authorize('topic.manage', $classroom);
+
         // $request->validate([
         //     'name' => ['required', 'string', 'max:255'],
         //     'classroom_id' => ['nullable']
@@ -123,6 +132,8 @@ class TopicController extends Controller
      */
     public function destroy(Classroom $classroom, Topic $topic)
     {
+        Gate::authorize('topic.manage', $classroom);
+
         $isDelete = $topic->delete();
         return response()->json([
             'message' => $isDelete ? 'Topic delete successfully' : 'delete failed',

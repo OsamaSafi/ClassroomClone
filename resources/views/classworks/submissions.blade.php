@@ -37,7 +37,7 @@
                             <td>
                                 {{ $classwork->options['grade'] }}
                             </td>
-                            @endif
+
                             <td>
                                 <form action="{{ route('grade-submission',$submission->id) }}" method="post">
                                     @csrf
@@ -51,6 +51,7 @@
                                     </div>
                                 </form>
                             </td>
+                            @endif
 
                             {{-- <td>{{ $user-> }}</td> --}}
                         </tr>

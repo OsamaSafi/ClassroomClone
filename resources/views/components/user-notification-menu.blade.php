@@ -1,15 +1,15 @@
 <li class="nav-item dropdown scrollable">
-    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Notifications
+    <a class="nav-link dropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa-solid fa-bell"></i>
         @if ($unreadCount)
         <span class="badge bg-primary">{{$unreadCount}}</span>
         @endif
     </a>
     <ul class="dropdown-menu">
         <li class="p-3 border-bottom rounded mb-2">
-            Notifications
+            Notification
         </li>
-        @foreach ($notifications as $notification)
+        @forelse ($notifications as $notification)
         <li class="">
             <a class="dropdown-item" href="{{$notification->data['link']}}?nid={{$notification->id}}">
                 <div class="d-flex justify-content-start align-items-center gap-1">
@@ -26,7 +26,10 @@
             </a>
             <hr>
         </li>
-        @endforeach
+        @empty
+        <p class="ms-2">dont have any notification</p>
+        @endforelse
+
         @if($notifications->count() > 4)
         <div class="text-center">
             <a href="{{route('notifications')}}" class="btn btn-sm btn-success my-2 mx-2">see all</a>

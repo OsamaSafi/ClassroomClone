@@ -31,13 +31,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home')->middleware('auth');
+Route::get('/', [ClassroomsController::class, 'index'])
+    ->name('home')
+    ->middleware('auth');
+
+
+Route::get('classrooms', [ClassroomsController::class, 'index'])
+    ->name('classrooms.index')
+    ->middleware('auth');
+
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 
 Route::middleware('auth')->group(function () {
@@ -88,6 +96,10 @@ Route::middleware('auth')->group(function () {
         ->name('classrooms.people');
     Route::delete('/classrooms/{classroom}/people', [ClassroomPeopleController::class, 'destroy'])
         ->name('classrooms.people.destroy');
+    Route::put('classrooms/{classroom}/makeTeacher', [ClassroomPeopleController::class, 'makeTeacher'])
+        ->name('classrooms.people.makeTeacher');
+    Route::put('classrooms/{classroom}/makeStudent', [ClassroomPeopleController::class, 'makeStudent'])
+        ->name('classrooms.people.makeStudent');
 
     Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.delete');
@@ -101,14 +113,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
 });
 
-
-
-Route::prefix('dashboard/admin')->as('dashboard.')->middleware('auth')->group(function () {
-    Route::get('/', function () {
-        return view('layouts.parent');
-    });
-    Route::resource('classrooms', DashboardClassroomController::class);
-});
 
 // Route::get('/login', [LoginController::class, 'create'])->name('login')->middleware('guest');
 // Route::post('/login', [LoginController::class, 'store'])->name('login.store')->middleware('guest');

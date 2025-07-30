@@ -44,6 +44,8 @@ class newClassworkNotification extends Notification
             ->action('Notification Action', url('/'))
             ->line('Thank you for using our application!');
     }
+
+    
     public function toBroadcast(object $notifiable): BroadcastMessage
     {
         $classwork = $this->classwork;

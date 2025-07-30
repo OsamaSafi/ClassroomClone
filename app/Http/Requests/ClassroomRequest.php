@@ -27,11 +27,11 @@ class ClassroomRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                function ($a, $v, $f) {
-                    if ($v == 'admin') {
-                        return $f('This name is forbiden');
-                    }
-                }
+                // function ($a, $v, $f) {
+                //     if ($v == 'admin') {
+                //         return $f('This name is forbiden');
+                //     }
+                // }
             ],
             'section' => [
                 'nullable',

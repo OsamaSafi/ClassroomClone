@@ -33,6 +33,9 @@ class ClassworkCreated implements ShouldBroadcast
     {
         return [
             new PrivateChannel('classroom.' . $this->classwork->classroom_id),
+            //classroom.1
+            //classroom.2
+            //classroom.3
         ];
     }
 

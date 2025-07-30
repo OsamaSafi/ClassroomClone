@@ -5,8 +5,12 @@
         <x-alert name='success' />
         <div class="card">
             <div class="card-header">
-                <h2>Topics <a href="{{ route('classrooms.topics.create',[$classroom->id]) }}" class="btn btn-primary"><i
-                            class="fa-solid fa-square-plus"></i></a></h2>
+                <h2>Topics
+                    @can('topic.manage', $classroom)
+                    <a href="{{ route('classrooms.topics.create',[$classroom->id]) }}" class="btn btn-primary"><i
+                            class="fa-solid fa-square-plus"></i></a>
+                    @endcan
+                </h2>
 
             </div>
             <!-- /.card-header -->
@@ -18,7 +22,9 @@
                             <th>{{__('Name')}}</th>
                             <th>{{__('Classroom')}}</th>
                             <th>{{__('User_id')}}</th>
+                            @can('topic.manage', $classroom)
                             <th>{{__('Action')}}</th>
+                            @endcan
                         </tr>
                     </thead>
                     @if ($topics->count())
@@ -28,14 +34,13 @@
                             <td>{{ $topic->id }}</td>
                             <td>{{ $topic->name }}</td>
                             <td>{{ $classroom->name }}</td>
-                            <td>{{ $topic->user_id}}</td>
+                            <td>{{ $topic->user->name}}</td>
                             @can('topic.manage', $classroom)
                             <td class="d-flex justify-content-center">
 
                                 <a href="{{ route('classrooms.topics.edit',[$classroom->id,$topic->id]) }}"
                                     class="btn btn-success"><i class="fa-solid fa-pen-to-square"></i></a>
 
-                                @endcan
                                 <form>
                                     <button onclick="confirmDelete('{{$classroom->id}}','{{$topic->id}}',this)"
                                         type="button" class="btn btn-danger">
@@ -43,6 +48,7 @@
                                     </button>
                                 </form>
                             </td>
+                            @endcan
                             @endforeach
                     </tbody>
                     @else
@@ -85,14 +91,7 @@
             })
         }
 
-        function showMessage(data){
-            Swal.fire({
-            icon: data.icon,
-            title: data.message,
-            showConfirmButton: false,
-            timer: 1500
-            });
-        }
+        
     </script>
 
     @endpush

@@ -28,6 +28,7 @@ class ClassroomsController extends Controller
     {
         // dd($classroom->users()->first()->profile->user_image_path ?? "");
         $classrooms = $classroom->orderBy('created_at', 'desc')->filter($request->query())->status('active')->paginate(4);
+        
         return view('classrooms.index', compact('classrooms'));
     }
 
@@ -80,6 +81,7 @@ class ClassroomsController extends Controller
     public function show(string $id)
     {
         $classroom = Classroom::findOrFail($id);
+        // select * from classrooms where classrooms.id = $id
         return view('classrooms.show', compact('classroom'));
     }
 
@@ -112,7 +114,7 @@ class ClassroomsController extends Controller
         $old = $classroom->cover_image_path;
         $classroom->update($validate);
         $new = $classroom->cover_image_path;
-        if ($old && $old <> $new) {
+        if ($old && $old == $new) {
             Classroom::deleteCoverImage($old);
         }
         return redirect()->route('classrooms.index')->with('success', "Classroom ($classroom->name) updated");
@@ -153,7 +155,7 @@ class ClassroomsController extends Controller
     {
         $classroom = Classroom::withTrashed()->findOrFail($id);
         $classroom->forceDelete();
-        return redirect()->route('classrooms.trached')->with('success', 'classroom ($classroom->name) Deleted');
+        return redirect()->route('classrooms.trashed')->with('success', "classroom ($classroom->name) Deleted");
     }
 
     public function chat(Classroom $classroom)
